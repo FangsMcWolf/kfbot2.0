@@ -347,23 +347,26 @@ public class LotteryHandler {
                 return false;
             }
 
-            //add song to currAdded
-            //possibly check against prevAdded so songs can't be requested twitch without reset
+            //possibly check duplicate/multiple enteries and requests
             if (currPool.contains(user)) {
-                sendMessage(displayName + " already entered in lottery");
-                //System.out.println(MAP.get(user));
-                //+ MAP.get(user).getContent());
+                sendMessage(displayName + " already entered a song in the lottery");
                 return false;
-            } else if (currAdded.contains(songListName)) {
-                sendMessage("@" + displayName + ", that song is already in the lottery, please choose a new song!");
-                return false;
-            } else if (prevAdded.contains(songListName)) {
-                sendMessage("@" + displayName + ", that song has already been played today, please choose a new song!");
-                return false;
-            } else {
-                currPool.add(user);
-                currAdded.add(songListName);
             }
+            
+            if (currAdded.contains(songListName)) {
+                sendMessage("@" + displayName + ", that song is already in the lottery, please choose another song!");
+                return false;
+            }
+            
+            if (prevAdded.contains(songListName)) {
+                sendMessage("@" + displayName + ", that song has already been played today, please choose another song!");
+                return false;
+            }
+            
+            // add song
+            currPool.add(user);
+            currAdded.add(songListName);
+            
             int ticketValue = 2;
 
             if (prevWinner.contains(user)) {
